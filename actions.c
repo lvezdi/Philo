@@ -6,7 +6,7 @@
 /*   By: lvez-dia <lvez-dia@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 13:40:28 by lvez-dia          #+#    #+#             */
-/*   Updated: 2025/11/16 13:45:29 by lvez-dia         ###   ########.fr       */
+/*   Updated: 2025/11/16 17:49:50 by lvez-dia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,18 @@ static int	handle_stop(t_philo *philo, pthread_mutex_t *first,
 	return (0);
 }
 
-static void	update_meal(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->meal_mutex);
-	philo->last_meal = get_time();
-	philo->times_eaten++;
-	pthread_mutex_unlock(&philo->meal_mutex);
-}
-
 static void	assign_forks(t_philo *philo, pthread_mutex_t **first,
 		pthread_mutex_t **second)
 {
-	if (philo->left_f < philo->right_f)
-	{
-		*first = philo->left_fork;
-		*second = philo->right_fork;
-	}
-	else
+	if (philo->id % 2 == 1)
 	{
 		*first = philo->right_fork;
 		*second = philo->left_fork;
+	}
+	else
+	{
+		*first = philo->left_fork;
+		*second = philo->right_fork;
 	}
 }
 
@@ -69,8 +61,11 @@ int	handle_eating(t_philo *philo)
 	if (philo->data->stop)
 		return (handle_stop(philo, first, second));
 	pthread_mutex_unlock(&philo->data->stop_mutex);
-	update_meal(philo);
 	print_message(philo, "is eating\n");
+	pthread_mutex_lock(&philo->meal_mutex);
+	philo->last_meal = get_time();
+	philo->times_eaten++;
+	pthread_mutex_unlock(&philo->meal_mutex);
 	usleep(philo->data->time_to_eat * 1000);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);

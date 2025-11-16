@@ -69,7 +69,7 @@ int	verification(char **argv)
 			return (0);
 		}
 		num = ft_atoi(argv[i]);
-		if (num > INT_MAX)
+		if (num > INT_MAX || num == 0)
 			return (0);
 		i++;
 	}

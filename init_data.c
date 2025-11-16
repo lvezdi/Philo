@@ -52,6 +52,7 @@ int	philos_initialisation(t_data *data)
 	data->philos = malloc(sizeof(t_philo) * data->num_philos);
 	if (data->philos == NULL)
 		return (1);
+	memset(data->philos, 0, sizeof(t_philo) * data->num_philos);
 	while (i < data->num_philos)
 	{
 		data->philos[i].id = i + 1;
@@ -63,6 +64,8 @@ int	philos_initialisation(t_data *data)
 		data->philos[i].last_meal = data->start_time;
 		data->philos[i].times_eaten = 0;
 		data->philos[i].data = data;
+		if (pthread_mutex_init(&data->philos[i].meal_mutex, NULL) != 0)
+			return (1);
 		i++;
 	}
 	return (0);
