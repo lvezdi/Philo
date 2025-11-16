@@ -2,11 +2,11 @@ NAME = philo
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g#3 -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=thread
 
 RM = rm -rf
 
-SRC = parseo.c philo.c init_data.c monitor.c\
+SRC = parseo.c philo.c init_data.c monitor.c routine.c actions.c\
 
 OBJS = $(SRC:.c=.o)
 
